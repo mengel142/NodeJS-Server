@@ -1,5 +1,5 @@
 var urlParser = require('url');
-const { parse } = require('querystring');
+
 
 
 /*************************************************************
@@ -53,7 +53,7 @@ var requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'applicaton/json';
+  headers['Content-Type'] = 'application/json';
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -74,18 +74,19 @@ var requestHandler = function(request, response) {
     if (request.method === 'POST') {
       let body = '';
       request.on('data', chunk => {
-        console.log('chunk: recieved', chunk.toString());
         body += chunk.toString();
-
       });
       request.on('end', () => {
-        let message = parse(body);
+        let message = JSON.parse(body);
         messages.results.push(message);
       });
-      response.writeHead(201, headers).end(JSON.stringify(messages));
+      response.statusCode = 201;
+      response.end(JSON.stringify(messages));
     }
   } else {
-    response.writeHead(404);
+    console.log('reaching error?');
+    response.statusCode = 404;
+    response.end();
   }
 };
 
