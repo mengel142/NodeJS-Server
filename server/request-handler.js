@@ -1,4 +1,4 @@
-var urlParser = require('url');
+var url = require('url');
 
 
 
@@ -41,7 +41,7 @@ var requestHandler = function(request, response) {
   // Adding more logging to your server can be an easy way to get passive
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
-  console.log('Serving request type ' + request.method + ' for url ' + request.url);
+  // console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
   // The outgoing status.
   var statusCode = 200;
@@ -69,7 +69,8 @@ var requestHandler = function(request, response) {
   // response.end('Hello, World!');
   if (request.url === '/classes/messages') {
     if (request.method === 'GET') {
-      response.writeHead(200, headers).end(JSON.stringify(messages));
+      response.writeHead(200, headers);
+      response.end(JSON.stringify(messages));
     }
     if (request.method === 'POST') {
       let body = '';
@@ -80,12 +81,12 @@ var requestHandler = function(request, response) {
         let message = JSON.parse(body);
         messages.results.push(message);
       });
-      response.statusCode = 201;
-      response.end(JSON.stringify(messages));
+      response.writeHead(201, headers);
+      response.end();
     }
   } else {
-    console.log('reaching error?');
-    response.statusCode = 404;
+    // response.statusCode = 404;
+    response.writeHead(404, headers);
     response.end();
   }
 };
