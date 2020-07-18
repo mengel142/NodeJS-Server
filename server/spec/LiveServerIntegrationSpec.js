@@ -73,5 +73,25 @@ describe('server', function() {
     });
   });
 
+  it('should accept OPTIONS requests to /classes/messages and respond with headers', function(done) {
+    var requestParams = {method: 'OPTIONS',
+      uri: 'http://127.0.0.1:3000/classes/messages',
+    };
+    var defaultCorsHeaders = {
+      'access-control-allow-origin': '*',
+      'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'access-control-allow-headers': 'content-type, accept',
+      'access-control-max-age': 10 // Seconds.
+    };
+    request(requestParams, function(error, response, body) {
+      expect(response.statusCode).to.equal(200);
+      for (let key in defaultCorsHeaders) {
+        expect(response.headers.hasOwnProperty(key)).to.equal(true);
+        expect(response.headers[key]).to.equal(defaultCorsHeaders[key].toString());
+      }
+      done();
+    });
+  });
+
 
 });

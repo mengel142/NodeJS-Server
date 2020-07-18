@@ -1,4 +1,4 @@
-var url = require('url');
+
 
 
 
@@ -82,6 +82,10 @@ var requestHandler = function(request, response) {
         messages.results.push(message);
       });
       response.writeHead(201, headers);
+      response.end(JSON.stringify(messages));
+    }
+    if (request.method === 'OPTIONS') {
+      response.writeHead(200, headers);
       response.end();
     }
   } else {
